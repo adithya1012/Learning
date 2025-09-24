@@ -11,3 +11,67 @@ console.log(true && false);
 console.log(false || "Adi");
 console.log(false || 1);
 console.log(false || 10 || 20); // return first truthy value in OR
+
+// if () {
+
+// }
+// else if () {
+
+// }
+// else {
+
+// }
+
+let test = "welcome";
+switch (test) {
+  case "greeting":
+    console.log("This is greeting");
+    break;
+  case "welcome":
+    console.log("This is welcome");
+    break;
+  default:
+    console.log("This is default");
+}
+
+// simple for loop
+for (let i = 0; i < 3; i++) {
+  console.log("for", i);
+}
+
+let i = 0;
+
+while (i < 3) {
+  console.log("while", i);
+  i++;
+}
+
+// let i = 0; # error redefinition
+
+// do {
+//    statements
+// } while (condition)
+
+// for in loop
+
+person = {
+  name: "Adithya",
+  age: 28,
+  company: "MIE",
+};
+
+for (key in person) {
+  console.log(key, person[key]);
+}
+
+data = ["hello", "All", "I", "am", "Adithya"];
+
+// for-in loop will give the index for the array/list
+for (index in data) {
+  console.log(index, data[index]);
+}
+
+// for-of itterate the elements in the array
+for (ele of data) {
+  console.log(ele);
+}

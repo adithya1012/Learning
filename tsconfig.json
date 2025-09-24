@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowUmdGlobalAccess": false,
+    "sourceMap": true,
+    "strict": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "$protocol/*": ["./protocol/*"],
+      "$sdk/*": ["./src/sdk/*"]
+    },
+    "types": ["dom"],
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "protocol/**/*"],
+  "exclude": ["node_modules"]
+}

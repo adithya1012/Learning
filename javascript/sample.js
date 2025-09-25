@@ -61,17 +61,60 @@ person = {
 };
 
 for (key in person) {
-  console.log(key, person[key]);
+  //   console.log(key, person[key]);
 }
 
 data = ["hello", "All", "I", "am", "Adithya"];
 
 // for-in loop will give the index for the array/list
 for (index in data) {
-  console.log(index, data[index]);
+  //   console.log(index, data[index]);
 }
 
 // for-of itterate the elements in the array
 for (ele of data) {
-  console.log(ele);
+  //   console.log(ele);
 }
+
+// Defining an object or dictinary (OOP)
+
+const circle = {
+  radius: 5,
+  location: {
+    x: 0,
+    y: 2,
+  },
+  isVisible: false,
+  draw: function () {
+    console.log("Curcle is drawing");
+  },
+};
+
+// circle.draw();
+
+// Factory function for creating objects. It will be in camel notation.
+function factoryObject(radius) {
+  return {
+    radius, // radius: radius, meaning
+    draw() {
+      // draw: function() {}, meaning
+      console.log("Drawing !!!");
+    },
+  };
+}
+
+// console.log(factoryObject(5));
+
+// Constructor function for creating the objects. It will be in Pascl notation.
+function Circle(radius) {
+  this.radius = radius;
+  this.draw = function () {
+    console.log("Draw");
+  };
+//   return this; // not necessary to return. It will automatically return.
+}
+
+const obj = new Circle(5);
+// obj.draw();
+
+

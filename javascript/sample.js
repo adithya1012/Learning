@@ -111,10 +111,29 @@ function Circle(radius) {
   this.draw = function () {
     console.log("Draw");
   };
-//   return this; // not necessary to return. It will automatically return.
+  //   return this; // not necessary to return. It will automatically return.
 }
 
 const obj = new Circle(5);
 // obj.draw();
 
+// Premitive types are coppied by value. and Objects are coppied by the referene or address.
 
+// premitive types: Number, String, Boolean, Symbol, undefined, null
+// Reference Types: Object (dict in python), Function, Array
+
+// Example:
+let x = 10;
+let y = x;
+
+y = 11;
+console.log(x); // 10
+console.log(y); // 11
+
+let x1 = { value: 10 };
+let y1 = x1;
+
+x1.value = 11;
+
+console.log(x1); // 11
+console.log(y1); // 11

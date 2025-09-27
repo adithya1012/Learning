@@ -137,3 +137,44 @@ x1.value = 11;
 
 console.log(x1); // 11
 console.log(y1); // 11
+
+// Createing the clone 3 methods.
+const circle1 = {
+  radius: 1,
+  draw() {
+    console.log("draw");
+  },
+};
+
+// Manually creating the clone
+// const another = {};
+// for (let key in circle1) {
+//   another[key] = circle1[key];
+// }
+
+// Spread Operator
+// const another = { ...circle1 };
+
+// Assign Method
+const another = Object.assign({}, circle1);
+
+console.log(another);
+
+// JS is having "Garbage Collection"
+
+//  Literals:
+// there are many types are literals:
+// object Literals : {}
+// Boolian Literals : true, false
+// String literals: '', ""
+// Template literal: ``
+const message = "this is my  \n'first' Message"; // now we cannot visualize how the end result looks like.
+const another_template_literals_msg = `this is my
+'first' Message`;
+
+console.log(message);
+console.log(another_template_literals_msg); // Both outputs are same.
+
+// we can add the place holders are also easily in Template literals.
+const something = `this is ${message} and ${2 + 3}`;
+console.log(something);

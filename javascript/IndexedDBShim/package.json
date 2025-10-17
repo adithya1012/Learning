@@ -1,0 +1,40 @@
+{
+  "name": "indexeddbshim-examples",
+  "version": "1.0.0",
+  "description": "Learning examples for IndexedDBShim - a polyfill for IndexedDB",
+  "main": "node-example.js",
+  "scripts": {
+    "test": "node testing-example.js",
+    "node-example": "node node-example.js",
+    "performance": "node performance-test.js",
+    "start": "npm run node-example"
+  },
+  "dependencies": {
+    "indexeddbshim": "^16.1.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "keywords": [
+    "indexeddb",
+    "polyfill",
+    "shim",
+    "database",
+    "websql",
+    "localstorage",
+    "browser-compatibility"
+  ],
+  "author": "Learning Project",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/indexeddbshim-examples"
+  },
+  "bugs": {
+    "url": "https://github.com/example/indexeddbshim-examples/issues"
+  },
+  "homepage": "https://github.com/example/indexeddbshim-examples#readme"
+}

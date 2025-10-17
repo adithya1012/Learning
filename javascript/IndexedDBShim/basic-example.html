@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IndexedDBShim Basic Example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      button {
+        background: #007cba;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin: 5px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #005a87;
+      }
+      #output {
+        background: #f5f5f5;
+        padding: 10px;
+        border-radius: 3px;
+        white-space: pre-wrap;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>IndexedDBShim Basic Example</h1>
+
+    <div class="section">
+      <h2>What's happening:</h2>
+      <p>
+        This example demonstrates how IndexedDBShim provides IndexedDB
+        functionality even in browsers that don't support it natively. The shim
+        will automatically detect if IndexedDB is available and use a fallback
+        if needed.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Database Operations</h2>
+      <button onclick="initDatabase()">Initialize Database</button>
+      <button onclick="addStudent()">Add Student</button>
+      <button onclick="getAllStudents()">Get All Students</button>
+      <button onclick="updateStudent()">Update Student</button>
+      <button onclick="deleteStudent()">Delete Student</button>
+      <button onclick="clearOutput()">Clear Output</button>
+    </div>
+
+    <div class="section">
+      <h2>Output:</h2>
+      <div id="output"></div>
+    </div>
+
+    <!-- Include IndexedDBShim -->
+    <script src="https://cdn.jsdelivr.net/npm/indexeddbshim@latest/dist/indexeddbshim.min.js"></script>
+
+    <script>
+      // Initialize the shim (this sets up the polyfill)
+      setGlobalVars();
+
+      let db;
+      const DB_NAME = "StudentDB";
+      const DB_VERSION = 1;
+      const STORE_NAME = "students";
+
+      function log(message) {
+        const output = document.getElementById("output");
+        output.textContent +=
+          new Date().toLocaleTimeString() + ": " + message + "\n";
+        output.scrollTop = output.scrollHeight;
+      }
+
+      function clearOutput() {
+        document.getElementById("output").textContent = "";
+      }
+
+      // Initialize Database
+      function initDatabase() {
+        log("Initializing database...");
+        log(
+          "Using: " +
+            (window.indexedDB.toString().includes("shimIndexedDB")
+              ? "IndexedDBShim"
+              : "Native IndexedDB")
+        );
+
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onerror = function (event) {
+          log("Database error: " + event.target.error);
+        };
+
+        request.onsuccess = function (event) {
+          db = event.target.result;
+          log("Database opened successfully");
+
+          // Set up error handler
+          db.onerror = function (event) {
+            log("Database error: " + event.target.error);
+          };
+        };
+
+        request.onupgradeneeded = function (event) {
+          db = event.target.result;
+          log("Database upgrade needed, creating object store...");
+
+          // Create object store
+          const objectStore = db.createObjectStore(STORE_NAME, {
+            keyPath: "id",
+            autoIncrement: true,
+          });
+
+          // Create indexes
+          objectStore.createIndex("name", "name", { unique: false });
+          objectStore.createIndex("email", "email", { unique: true });
+          objectStore.createIndex("age", "age", { unique: false });
+
+          log("Object store and indexes created");
+        };
+      }
+
+      // Add a student
+      function addStudent() {
+        if (!db) {
+          log("Please initialize database first");
+          return;
+        }
+
+        const student = {
+          name: "John Doe " + Math.floor(Math.random() * 1000),
+          email: "john" + Math.floor(Math.random() * 1000) + "@example.com",
+          age: Math.floor(Math.random() * 40) + 18,
+          grade: "A",
+        };
+
+        const transaction = db.transaction([STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const request = objectStore.add(student);
+
+        request.onsuccess = function (event) {
+          log("Student added with ID: " + event.target.result);
+          log("Added: " + JSON.stringify(student, null, 2));
+        };
+
+        request.onerror = function (event) {
+          log("Error adding student: " + event.target.error);
+        };
+      }
+
+      // Get all students
+      function getAllStudents() {
+        if (!db) {
+          log("Please initialize database first");
+          return;
+        }
+
+        const transaction = db.transaction([STORE_NAME], "readonly");
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const request = objectStore.getAll();
+
+        request.onsuccess = function (event) {
+          const students = event.target.result;
+          log("Found " + students.length + " students:");
+          students.forEach((student) => {
+            log(
+              "ID: " +
+                student.id +
+                ", Name: " +
+                student.name +
+                ", Email: " +
+                student.email +
+                ", Age: " +
+                student.age
+            );
+          });
+        };
+
+        request.onerror = function (event) {
+          log("Error getting students: " + event.target.error);
+        };
+      }
+
+      // Update a student
+      function updateStudent() {
+        if (!db) {
+          log("Please initialize database first");
+          return;
+        }
+
+        // First, get a student to update
+        const transaction = db.transaction([STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsuccess = function (event) {
+          const students = event.target.result;
+          if (students.length === 0) {
+            log("No students to update. Add some students first.");
+            return;
+          }
+
+          // Update the first student
+          const student = students[0];
+          student.grade = student.grade === "A" ? "B" : "A";
+          student.age += 1;
+
+          const updateRequest = objectStore.put(student);
+          updateRequest.onsuccess = function () {
+            log(
+              "Updated student ID " +
+                student.id +
+                ": " +
+                JSON.stringify(student, null, 2)
+            );
+          };
+
+          updateRequest.onerror = function (event) {
+            log("Error updating student: " + event.target.error);
+          };
+        };
+      }
+
+      // Delete a student
+      function deleteStudent() {
+        if (!db) {
+          log("Please initialize database first");
+          return;
+        }
+
+        // First, get a student to delete
+        const transaction = db.transaction([STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsuccess = function (event) {
+          const students = event.target.result;
+          if (students.length === 0) {
+            log("No students to delete.");
+            return;
+          }
+
+          // Delete the last student
+          const studentToDelete = students[students.length - 1];
+          const deleteRequest = objectStore.delete(studentToDelete.id);
+
+          deleteRequest.onsuccess = function () {
+            log(
+              "Deleted student: " +
+                studentToDelete.name +
+                " (ID: " +
+                studentToDelete.id +
+                ")"
+            );
+          };
+
+          deleteRequest.onerror = function (event) {
+            log("Error deleting student: " + event.target.error);
+          };
+        };
+      }
+
+      // Initialize on page load
+      window.onload = function () {
+        log('Page loaded. Click "Initialize Database" to start.');
+        log("IndexedDBShim loaded: " + (typeof setGlobalVars !== "undefined"));
+      };
+    </script>
+  </body>
+</html>

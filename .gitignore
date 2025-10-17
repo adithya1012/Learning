@@ -1,0 +1,424 @@
+# ===================================
+# Learning Repository - Global .gitignore
+# Covers all project types and unnecessary files
+# ===================================
+
+# ===================================
+# Operating System Files
+# ===================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.AppleDouble
+.LSOverride
+Icon?
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===================================
+# Node.js & JavaScript Projects
+# ===================================
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+jspm_packages/
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.npmrc
+.yarnrc
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+.nyc_output
+
+# Grunt intermediate storage
+.grunt
+
+# Bower dependency directory
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons
+build/Release
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# parcel-bundler cache
+.cache
+.parcel-cache
+
+# next.js build output
+.next
+out/
+
+# nuxt.js build output
+.nuxt
+dist/
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# ===================================
+# TypeScript
+# ===================================
+
+# Compiled JavaScript files
+*.js.map
+*.d.ts
+lib/
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# ===================================
+# React & Frontend Frameworks
+# ===================================
+
+# Build outputs
+build/
+dist/
+out/
+.next/
+.nuxt/
+.vuepress/dist/
+
+# Static files
+static/
+public/build/
+
+# Storybook build outputs
+storybook-static
+
+# ===================================
+# Bundlers & Build Tools
+# ===================================
+
+# Webpack
+.webpack/
+
+# Rollup
+.rollup.cache/
+
+# Vite
+.vite/
+.vite-cache/
+
+# Parcel
+.parcel-cache/
+
+# ESBuild
+.esbuild/
+
+# ===================================
+# Testing
+# ===================================
+
+# Jest
+coverage/
+.jest/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# Playwright
+test-results/
+playwright-report/
+
+# ===================================
+# Meteor.js
+# ===================================
+
+.meteor/local
+.meteor/meteorite
+
+# ===================================
+# Database Files
+# ===================================
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+
+# IndexedDB (browser storage)
+*.indexeddb
+
+# MongoDB
+dump/
+
+# ===================================
+# Logs
+# ===================================
+
+# General logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime logs
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# ===================================
+# Editor & IDE Files
+# ===================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Atom
+.atom/
+
+# WebStorm/IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# ===================================
+# Temporary Files
+# ===================================
+
+# General temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# ===================================
+# Security & Credentials
+# ===================================
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# API keys and secrets
+.secrets
+secrets.json
+config/secrets.js
+
+# Certificate files
+*.pem
+*.key
+*.crt
+*.csr
+
+# ===================================
+# Documentation
+# ===================================
+
+# Generated documentation
+docs/build/
+documentation/
+
+# ===================================
+# Deployment
+# ===================================
+
+# Vercel
+.vercel
+
+# Netlify
+.netlify/
+
+# Firebase
+.firebase/
+firebase-debug.log
+
+# Heroku
+.heroku/
+
+# ===================================
+# Archives
+# ===================================
+
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# ===================================
+# Project Specific
+# ===================================
+
+# IndexedDBShim examples - temporary database files
+javascript/IndexedDBShim/temp-db/
+javascript/IndexedDBShim/*.db
+javascript/IndexedDBShim/*.sqlite
+
+# Vite projects - generated files
+Vite/*/dist/
+Vite/*/.vite/
+
+# MeteorJS - local development files
+MeteorJS/.meteor/local/
+MeteorJS/.meteor/meteorite/
+
+# Chatbots - build outputs
+Chatbots/*/dist/
+Chatbots/*/build/
+
+# Protocol files - compiled outputs
+protocol/*.js
+protocol/*.d.ts
+
+# SDK - build outputs
+sdk/dist/
+sdk/build/
+
+# Screenshots and media (keep intentional ones)
+screenshots/temp/
+*.screenshot
+
+# ===================================
+# Performance & Profiling
+# ===================================
+
+# Chrome profiling
+*.cpuprofile
+*.heapprofile
+*.heapsnapshot
+
+# ===================================
+# Miscellaneous
+# ===================================
+
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Local configuration files
+.local
+.config/
+
+# Optional packages
+packages/*/node_modules/

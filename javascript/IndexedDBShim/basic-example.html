@@ -54,6 +54,7 @@
 
     <div class="section">
       <h2>Database Operations</h2>
+      <button onclick="checkStatus()">Check Status</button>
       <button onclick="initDatabase()">Initialize Database</button>
       <button onclick="addStudent()">Add Student</button>
       <button onclick="getAllStudents()">Get All Students</button>
@@ -67,17 +68,41 @@
       <div id="output"></div>
     </div>
 
-    <!-- Include IndexedDBShim -->
-    <script src="https://cdn.jsdelivr.net/npm/indexeddbshim@latest/dist/indexeddbshim.min.js"></script>
+    <!-- Include IndexedDBShim with error handling -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/indexeddbshim@16.1.0/dist/indexeddbshim.min.js"
+      onerror="console.error('Failed to load IndexedDBShim from CDN')"
+    ></script>
+
+    <!-- Fallback script if CDN fails -->
+    <script>
+      if (typeof setGlobalVars === "undefined") {
+        console.warn(
+          "IndexedDBShim not loaded from CDN, using native IndexedDB if available"
+        );
+        // Create a dummy setGlobalVars function
+        window.setGlobalVars = function () {
+          console.log("Using native IndexedDB");
+        };
+      }
+    </script>
 
     <script>
-      // Initialize the shim (this sets up the polyfill)
-      setGlobalVars();
-
-      let db;
+      // Global variables
+      let db = null;
       const DB_NAME = "StudentDB";
       const DB_VERSION = 1;
       const STORE_NAME = "students";
+
+      // Initialize the shim after DOM is loaded
+      function initializeShim() {
+        if (typeof setGlobalVars === "function") {
+          setGlobalVars();
+          log("IndexedDBShim initialized successfully");
+        } else {
+          log("Using native IndexedDB or shim not loaded");
+        }
+      }
 
       function log(message) {
         const output = document.getElementById("output");
@@ -90,15 +115,52 @@
         document.getElementById("output").textContent = "";
       }
 
+      // Check current status
+      function checkStatus() {
+        log("=== Current Status ===");
+        log("IndexedDB available: " + (typeof indexedDB !== "undefined"));
+        log(
+          "setGlobalVars available: " + (typeof setGlobalVars !== "undefined")
+        );
+        log("Database initialized: " + (db !== null));
+
+        if (typeof indexedDB !== "undefined") {
+          const usingShim =
+            window.indexedDB &&
+            (window.indexedDB.toString().includes("shimIndexedDB") ||
+              window.indexedDB.toString().includes("shim") ||
+              typeof shimIndexedDB !== "undefined");
+          log(
+            "Implementation: " +
+              (usingShim ? "IndexedDBShim" : "Native IndexedDB")
+          );
+        }
+
+        if (db) {
+          log("Database name: " + db.name);
+          log("Database version: " + db.version);
+          log("Object stores: " + Array.from(db.objectStoreNames).join(", "));
+        }
+        log("=== End Status ===");
+      }
+
       // Initialize Database
       function initDatabase() {
+        // Initialize shim first if not already done
+        if (typeof window.indexedDB === "undefined") {
+          initializeShim();
+        }
+
         log("Initializing database...");
-        log(
-          "Using: " +
-            (window.indexedDB.toString().includes("shimIndexedDB")
-              ? "IndexedDBShim"
-              : "Native IndexedDB")
-        );
+
+        // Check if we're using the shim
+        const usingShim =
+          window.indexedDB &&
+          (window.indexedDB.toString().includes("shimIndexedDB") ||
+            window.indexedDB.toString().includes("shim") ||
+            typeof shimIndexedDB !== "undefined");
+
+        log("Using: " + (usingShim ? "IndexedDBShim" : "Native IndexedDB"));
 
         const request = indexedDB.open(DB_NAME, DB_VERSION);
 
@@ -138,29 +200,33 @@
       // Add a student
       function addStudent() {
         if (!db) {
-          log("Please initialize database first");
+          log("❌ Please initialize database first");
           return;
         }
 
-        const student = {
-          name: "John Doe " + Math.floor(Math.random() * 1000),
-          email: "john" + Math.floor(Math.random() * 1000) + "@example.com",
-          age: Math.floor(Math.random() * 40) + 18,
-          grade: "A",
-        };
+        try {
+          const student = {
+            name: "John Doe " + Math.floor(Math.random() * 1000),
+            email: "john" + Math.floor(Math.random() * 1000) + "@example.com",
+            age: Math.floor(Math.random() * 40) + 18,
+            grade: "A",
+          };
 
-        const transaction = db.transaction([STORE_NAME], "readwrite");
-        const objectStore = transaction.objectStore(STORE_NAME);
-        const request = objectStore.add(student);
+          const transaction = db.transaction([STORE_NAME], "readwrite");
+          const objectStore = transaction.objectStore(STORE_NAME);
+          const request = objectStore.add(student);
 
-        request.onsuccess = function (event) {
-          log("Student added with ID: " + event.target.result);
-          log("Added: " + JSON.stringify(student, null, 2));
-        };
+          request.onsuccess = function (event) {
+            log("✅ Student added with ID: " + event.target.result);
+            log("Added: " + JSON.stringify(student, null, 2));
+          };
 
-        request.onerror = function (event) {
-          log("Error adding student: " + event.target.error);
-        };
+          request.onerror = function (event) {
+            log("❌ Error adding student: " + event.target.error);
+          };
+        } catch (error) {
+          log("❌ Exception in addStudent: " + error.message);
+        }
       }
 
       // Get all students
@@ -278,7 +344,15 @@
       // Initialize on page load
       window.onload = function () {
         log('Page loaded. Click "Initialize Database" to start.');
-        log("IndexedDBShim loaded: " + (typeof setGlobalVars !== "undefined"));
+
+        // Try to initialize the shim
+        initializeShim();
+
+        // Check what's available
+        log("IndexedDB available: " + (typeof indexedDB !== "undefined"));
+        log(
+          "setGlobalVars available: " + (typeof setGlobalVars !== "undefined")
+        );
       };
     </script>
   </body>

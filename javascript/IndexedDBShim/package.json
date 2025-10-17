@@ -10,7 +10,9 @@
     "start": "npm run node-example"
   },
   "dependencies": {
-    "indexeddbshim": "^16.1.0"
+    "better-sqlite3": "^12.4.1",
+    "indexeddbshim": "^16.1.0",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "http-server": "^14.1.1"
